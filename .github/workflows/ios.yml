@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest]
-        qt_ver: [5.9.8,5.12.6]
+        qt_ver: [5.12.6]
         qt_target: [ios]
     steps:
       - name: Install Qt
@@ -30,7 +30,7 @@ jobs:
       - name: build ios
         run: |
           export PATH=$PATH:$Qt5_Dir
-          qmake
+          qmake -r
           make
       # - name: CacheQt
       #   uses: actions/cache@v1

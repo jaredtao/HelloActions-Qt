@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
+        # 5.9.8 版本低，需要额外设置工具链。这里暂不支持。
         qt_ver: [5.12.6]
         qt_target: [android]
         # android_arm64_v8a 暂时不支持. install-qt-action 依赖的aqtinstall版本为0.5*,需要升级
