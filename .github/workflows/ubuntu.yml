@@ -44,7 +44,7 @@ jobs:
           make
       - name: CacheQt
         uses: actions/cache@v1
-        if: matrix.qt_ver == "5.12.6"
+        if: matrix.qt_ver == '5.12.6'
         with:
           path: ${{ env.Qt5_Dir }}
           key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}
