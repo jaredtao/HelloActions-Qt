@@ -1,4 +1,4 @@
-name: WindowsAction
+name: Windows
 on: 
   # push代码时触发workflow
   push:

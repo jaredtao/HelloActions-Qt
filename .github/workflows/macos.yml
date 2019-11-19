@@ -1,4 +1,4 @@
-name: MacOSAction
+name: MacOS
 on: 
   push:
     paths-ignore:
