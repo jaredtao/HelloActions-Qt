@@ -1,0 +1,45 @@
+name: Android
+on: 
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'      
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'      
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        qt_ver: [5.9.8,5.12.6]
+        qt_target: [android]
+        qt_arch: [android_x86_64,android_arm64_v8a,android_x86,android_armv7]
+    steps:
+      - name: Install Qt
+        # if: steps.cacheqt.outputs.cache-hit != 'true'
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          target: ${{ matrix.qt_target }}
+          # Architecture for Windows/Android
+          arch: ${{ matrix.qt_arch }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: build android
+        shell: cmd
+        run: |
+          set PATH=%PATH%;%Qt5_Dir%/bin
+          qmake
+          make
+      # - name: CacheQt
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ${{ env.Qt5_Dir }}
+      #     key: ${{ runner.OS }}-Qt
