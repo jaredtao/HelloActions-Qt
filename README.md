@@ -10,20 +10,20 @@
 | ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   | ![license-badge] |![release-badge] | ![download-badge]|
 
 
-[win-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AWindowsAction "Action"
-[win-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/WindowsAction/badge.svg  "WindowsAction"
+[win-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AWindowsAction "WindowsAction"
+[win-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/WindowsAction/badge.svg  "Windows"
 
-[ubuntu-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AUbuntuAction "Action"
-[ubuntu-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/UbuntuAction/badge.svg "UbuntuAction"
+[ubuntu-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AUbuntuAction "UbuntuAction"
+[ubuntu-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/UbuntuAction/badge.svg "Ubuntu"
 
 [macos-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AMacOSAction "MacOSAction"
-[macos-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/MacOSAction/badge.svg "MacOSAction"
+[macos-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/MacOSAction/badge.svg "MacOS"
 
-[android-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AAndroidAction "Action"
-[android-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/AndroidAction/badge.svg "AndroidAction"
+[android-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AAndroidAction "AndroidAction"
+[android-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/AndroidAction/badge.svg "Android"
 
-[ios-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AIOSAction "Action"
-[ios-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/IOSAction/badge.svg "IOSAction"
+[ios-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AIOSAction "IOSAction"
+[ios-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/IOSAction/badge.svg "IOS"
 
 [release-link]: https://github.com/jaredtao/HelloActions-Qt/releases "Release status"
 [release-badge]: https://img.shields.io/github/release/jaredtao/HelloActions-Qt.svg?style=flat-square" "Release status"
