@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest]
         qt_ver: [5.9.8,5.12.6]
         qt_target: [android]
         # android_arm64_v8a 暂时不支持. install-qt-action 依赖的aqtinstall版本为0.5*,需要升级
@@ -38,9 +38,10 @@ jobs:
         with:
           fetch-depth: 1
       - name: build android
-        shell: cmd
         run: |
-          set PATH=%PATH%;%Qt5_Dir%/bin
+          export PATH=$PATH:$Qt5_Dir
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
           qmake
           make
       # - name: CacheQt
