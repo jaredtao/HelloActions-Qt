@@ -5,10 +5,14 @@
 演示github中的Qt项目，使用CI持续集成(Github actions)
 
 ## status
-| [Windows][win-link]| [Ubuntu][ubuntu-link]|[MacOS][macos-link]|[Android][android-link]|[IOS][ios-link]|[License][license-link]| [Release][release-link]|[Download][download-link]|
-|---------------|---------------|-----------------|-----------------|----------------|-----------------|-----------------|-----------------|
-| ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   | ![license-badge] |![release-badge] | ![download-badge]|
+| [Windows][win-link]| [Ubuntu][ubuntu-link]|[MacOS][macos-link]|[Android][android-link]|[IOS][ios-link]|
+|---------------|---------------|-----------------|-----------------|----------------|
+| ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   |
 
+
+|[License][license-link]| [Release][release-link]|[Download][download-link]|
+|-----------------|-----------------|-----------------|
+|![license-badge] |![release-badge] | ![download-badge]|
 
 [win-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AWindows "WindowsAction"
 [win-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/Windows/badge.svg  "Windows"
