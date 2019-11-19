@@ -6,7 +6,7 @@
 
 ## status
 | [Windows][win-link]| [Ubuntu][ubuntu-link]|[MacOS][macos-link]|[Android][android-link]|[IOS][ios-link]|[License][license-link]| [Release][release-link]|[Download][download-link]|
-| :---------------: | :---------------: | :-----------------: | :-----------------:|:-----------------: |:-----------------: |:-----------------: |:-----------------: |
+|---------------|---------------|-----------------|-----------------|----------------|-----------------|-----------------|-----------------|
 | ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   | ![license-badge] |![release-badge] | ![download-badge]|
 
 
