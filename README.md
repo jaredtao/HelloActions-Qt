@@ -4,8 +4,30 @@
 
 演示github中的Qt项目，使用CI持续集成(Github actions)
 
+## status
+| [Windows][win-link]| [Ubuntu][ubuntu-link]|[MacOS][macos-link]|[Android][android-link]|[IOS][ios-link]|[License][license-link]| [Release][release-link]|[Download][download-link]|
+| :---------------: | :---------------: | :-----------------: | :-----------------:|:-----------------: |:-----------------: |:-----------------: |:-----------------: |
+| ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   | ![license-badge] |![release-badge] | ![download-badge]|
+
+[Actions]: https://github.com/jaredtao/HelloActions-Qt/actions "Actions"
+[Actions-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/WindowsBuild/badge.svg
+[lin-badge]: https://travis-ci.org/jaredtao/HelloCI.svg?branch=master "Travis build status"
+[lin-link]: https://travis-ci.org/jaredtao/HelloCI "Travis build status"
+[win-badge]: https://ci.appveyor.com/api/projects/status/yykx4xufxtrax1hi?svg=true "AppVeyor build status"
+[win-link]: https://ci.appveyor.com/project/jiawentao/helloci "AppVeyor build status"
+[release-link]: https://github.com/jaredtao/HelloCI/releases "Release status"
+[release-badge]: https://img.shields.io/github/release/jaredtao/HelloCI.svg?style=flat-square" "Release status"
+[download-link]: https://github.com/jaredtao/HelloCI/releases/latest "Download status"
+[download-badge]: https://img.shields.io/github/downloads/jaredtao/HelloCI/total.svg?style=flat-square "Download status"
+[license-link]: https://github.com/jaredtao/HelloCI/blob/master/LICENSE "LICENSE"
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg "MIT"
+## support
+[![GitHub Issues](https://img.shields.io/badge/github-issues-red.svg?maxAge=60)](https://github.com/jaredtao/HelloCI/issues)
+[![GitHub Wiki](https://img.shields.io/badge/github-wiki-181717.svg?maxAge=60)](https://github.com/jaredtao/HelloCI/wiki)
+
 ## 原理
 
+(待更新)
 
 ## 答疑和技术支持
 
