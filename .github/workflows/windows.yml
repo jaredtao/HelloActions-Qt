@@ -1,0 +1,85 @@
+name: WindowsAction
+on: 
+  # push代码时触发workflow
+  push:
+    # 忽略README.md
+    paths-ignore:
+      - 'README.md'
+  # pull_request时触发workflow
+  pull_request:
+    # 忽略README.md
+    paths-ignore:
+      - 'README.md'
+jobs:
+  build:
+    name: Build
+    # 运行平台， windows-latest目前是windows server 2019
+    runs-on: windows-latest
+    strategy:
+      # 矩阵配置
+      matrix:
+        qt_ver: [5.9.8,5.12.6]
+        qt_target: [desktop]
+        # mingw用不了
+        # qt_arch: [win64_msvc2017_64, win32_msvc2017, win32_mingw53,win32_mingw73]
+        qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        # 从矩阵中除外的配置
+        exclude: 
+          # 不存在5.9.8-win32_msvc2017的版本
+          - qt_ver: 5.9.8
+            qt_arch: win32_msvc2017
+          # mingw用不了
+          # - qt_ver: 5.9.8
+          #   qt_arch: win32_mingw73
+          # - qt_ver: 5.12.6
+          #   qt_arch: win32_mingw53
+    # 步骤
+    steps:
+      # 安装Qt
+      - name: Install Qt
+        # 缓存未命中时才安装
+        if: steps.cacheqt.outputs.cache-hit != 'true'
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          target: ${{ matrix.qt_target }}
+          # Architecture for Windows/Android
+          arch: ${{ matrix.qt_arch }}
+      # 拉取代码
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      # 条件编译msvc-x64
+      - name: build-msvc-x64
+        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win64')
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          qmake
+          nmake
+      # 条件编译msvc-x86
+      - name: build-msvc-x86
+        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win32')
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+          qmake
+          nmake
+      # 条件编译mingw(用不了)
+      - name: build-mingw
+        if: contains(matrix.qt_arch,'mingw')
+        shell: cmd
+        run: |
+          qmake
+          mingw32-make
+      # 条件缓存
+      - name: CacheQt
+        uses: actions/cache@v1
+        # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
+        if: matrix.qt_ver == "5.12.6" && matrix.qt_arch == "win64_msvc2017_64"
+        with:
+          path: ${{ env.Qt5_Dir }}
+          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
