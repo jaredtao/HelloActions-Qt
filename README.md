@@ -9,21 +9,33 @@
 | :---------------: | :---------------: | :-----------------: | :-----------------:|:-----------------: |:-----------------: |:-----------------: |:-----------------: |
 | ![win-badge]  | ![ubuntu-badge]      | ![macos-badge] |![android-badge]   |![ios-badge]   | ![license-badge] |![release-badge] | ![download-badge]|
 
-[Actions]: https://github.com/jaredtao/HelloActions-Qt/actions "Actions"
-[Actions-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/WindowsBuild/badge.svg
-[lin-badge]: https://travis-ci.org/jaredtao/HelloCI.svg?branch=master "Travis build status"
-[lin-link]: https://travis-ci.org/jaredtao/HelloCI "Travis build status"
-[win-badge]: https://ci.appveyor.com/api/projects/status/yykx4xufxtrax1hi?svg=true "AppVeyor build status"
-[win-link]: https://ci.appveyor.com/project/jiawentao/helloci "AppVeyor build status"
-[release-link]: https://github.com/jaredtao/HelloCI/releases "Release status"
-[release-badge]: https://img.shields.io/github/release/jaredtao/HelloCI.svg?style=flat-square" "Release status"
-[download-link]: https://github.com/jaredtao/HelloCI/releases/latest "Download status"
-[download-badge]: https://img.shields.io/github/downloads/jaredtao/HelloCI/total.svg?style=flat-square "Download status"
-[license-link]: https://github.com/jaredtao/HelloCI/blob/master/LICENSE "LICENSE"
+
+[win-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AWindowsAction "Action"
+[win-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/WindowsAction/badge.svg  "WindowsAction"
+
+[ubuntu-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AUbuntuAction "Action"
+[ubuntu-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/UbuntuAction/badge.svg "UbuntuAction"
+
+[macos-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AMacOSAction "MacOSAction"
+[macos-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/MacOSAction/badge.svg "MacOSAction"
+
+[android-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AAndroidAction "Action"
+[android-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/AndroidAction/badge.svg "AndroidAction"
+
+[ios-link]: https://github.com/JaredTao/HelloActions-Qt/actions?query=workflow%3AIOSAction "Action"
+[ios-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/IOSAction/badge.svg "IOSAction"
+
+[release-link]: https://github.com/jaredtao/HelloActions-Qt/releases "Release status"
+[release-badge]: https://img.shields.io/github/release/jaredtao/HelloActions-Qt.svg?style=flat-square" "Release status"
+[download-link]: https://github.com/jaredtao/HelloActions-Qt/releases/latest "Download status"
+[download-badge]: https://img.shields.io/github/downloads/jaredtao/HelloActions-Qt/total.svg?style=flat-square "Download status"
+[license-link]: https://github.com/jaredtao/HelloActions-Qt/blob/master/LICENSE "LICENSE"
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg "MIT"
+
 ## support
-[![GitHub Issues](https://img.shields.io/badge/github-issues-red.svg?maxAge=60)](https://github.com/jaredtao/HelloCI/issues)
-[![GitHub Wiki](https://img.shields.io/badge/github-wiki-181717.svg?maxAge=60)](https://github.com/jaredtao/HelloCI/wiki)
+
+[![GitHub Issues](https://img.shields.io/badge/github-issues-red.svg?maxAge=60)](https://github.com/jaredtao/HelloActions-Qt/issues)
+[![GitHub Wiki](https://img.shields.io/badge/github-wiki-181717.svg?maxAge=60)](https://github.com/jaredtao/HelloActions-Qt/wiki)
 
 ## 原理
 
