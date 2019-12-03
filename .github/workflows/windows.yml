@@ -20,9 +20,11 @@ jobs:
     strategy:
       # 矩阵配置
       matrix:
-        qt_ver: [5.9.8,5.12.6]
+        # qt_ver: [5.9.8,5.12.6]
+        qt_ver: [5.12.6]
         qt_target: [desktop]
-        qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        # qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        qt_arch: [win64_msvc2017_64]
         # 从矩阵中除外的配置
         exclude: 
           # 不存在5.9.8-win32_msvc2017的版本
@@ -30,13 +32,12 @@ jobs:
             qt_arch: win32_msvc2017
     # 步骤
     steps:
-      # - name: showEvent
-      #   env:
-      #     isTag: ${{ startsWith(github.event.ref, 'refs/tags/') }}
-      #     commitMessage: ${{ github.event.commits.message }}
-      #   shell: pwsh
-      #   run:
-      #     Write-Host $env:GITHUB_EVENT_DATA
+      - name: showEvent
+        env:
+          GITHUB_EVENT_DATA: ${{ toJson(github.event) }}
+        shell: pwsh
+        run:
+          Write-Host $env:GITHUB_EVENT_DATA
       # 安装Qt
       - name: Install Qt
         # 缓存未命中时才安装
@@ -83,6 +84,7 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
           packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
         shell: cmd
         run: |
           mkdir %packageName%
