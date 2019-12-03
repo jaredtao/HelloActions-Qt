@@ -80,8 +80,8 @@ jobs:
         shell: pwsh
         run: |
           # actions 特殊语法
-          $packageInfo = ${ matrix:qt_ver }-${ matrix:qt_target }-${ matrix:qt_arch }
-          echo ::set-env name=packageName::$packageInfo
+          $packageInfo = ${matrix:qt_ver}-${matrix:qt_target}-${matrix:qt_arch}
+          echo ::set-env name=packageName::${packageInfo}
           Write-Host ${env:packageName}
       # tag部署
       - name: package
