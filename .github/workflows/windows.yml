@@ -79,7 +79,7 @@ jobs:
         with:
           path: ${{ env.Qt5_Dir }}
           key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-      # tag打包
+      # tag部署
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
@@ -90,7 +90,15 @@ jobs:
           mkdir %packageName%
           xcopy /y bin\HelloActions-Qt.exe %packageName%\
           windeployqt --qmldir . %packageName%\HelloActions-Qt.exe
-          7za a -t7z %packageName%.7z %packageName%\
+      # 打包
+      - name: Archive
+        if: startsWith(github.event.ref, 'refs/tags/')
+        env:
+          packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: '${{packageName}}.zip'
+          path: ${{packageName}}
       # tag 创建Release
       - name: createRelease
         id: create_release
