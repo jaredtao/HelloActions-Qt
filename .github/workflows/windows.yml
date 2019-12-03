@@ -90,7 +90,7 @@ jobs:
           mkdir %packageName%
           xcopy /y bin\HelloActions-Qt.exe %packageName%\
           windeployqt --qmldir . %packageName%\HelloActions-Qt.exe
-          zip --junk-paths %packageName%
+          7za a -t7z %packageName%.7z %packageName%\
       # tag 创建Release
       - name: createRelease
         id: create_release
