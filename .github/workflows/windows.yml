@@ -82,7 +82,7 @@ jobs:
         shell: pwsh
         run: |
           # actions 特殊语法
-          echo ::set-env name=packageName::'${env:packageInfo}'
+          echo ::set-env name=packageName::'$env:packageInfo'
           Write-Host $env:packageName
       # tag部署
       - name: package
