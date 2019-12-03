@@ -104,6 +104,7 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         uses: actions/create-release@v1.0.0
         with:
           tag_name: ${{ github.ref }}
@@ -117,11 +118,10 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         uses: actions/upload-release-asset@v1.0.1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.uploadRelease.env.packageName }}.zip
-          asset_name: ${{ steps.uploadRelease.env.packageName }}.zip
+          asset_path: ./
+          asset_name: ${{ steps.create_release.env.packageName }}.zip
           asset_content_type: application/zip
 
