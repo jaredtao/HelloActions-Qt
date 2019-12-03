@@ -40,7 +40,7 @@ jobs:
       - name: showEvent
         env:
           GITHUB_EVENT_DATA: ${{ toJson(github.event) }}
-        cmd: pwsh
+        shell: pwsh
         run:
           Write-Host $env:GITHUB_EVENT_DATA
       # # 安装Qt
