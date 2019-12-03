@@ -120,7 +120,7 @@ jobs:
         uses: actions/upload-release-asset@v1.0.1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: './'${{ env.packageName }}'.zip'
-          asset_name: ${{ env.packageName }}'.zip'
+          asset_path: ./${{ env.packageName }}.zip
+          asset_name: ${{ env.packageName }}.zip
           asset_content_type: application/zip
 
