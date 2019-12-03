@@ -86,12 +86,17 @@ jobs:
         shell: cmd
         run: |
           mkdir %packageName%
-          copy /y bin\HelloActions-qt %packageName%\
-          windeployqt --qmldir . %packageName%\HelloActions-qt
-      - name: upload
-        if: startsWith(github.event.ref, 'refs/tags/')
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-          path: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-      
+          xcopy /y bin\HelloActions-Qt.exe %packageName%\
+          windeployqt --qmldir . %packageName%\HelloActions-Qt.exe
+      # - name: createRelease
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   uses: actions/upload-artifact@v1.0.0
+      #   with:
+      #     tag_name: 
+      # - name: uploadRelease
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   uses: actions/upload-artifact@v1.0.0
