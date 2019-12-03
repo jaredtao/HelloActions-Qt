@@ -78,11 +78,11 @@ jobs:
       - name: setEnv
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
-          packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          packageInfo: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         shell: pwsh
         run: |
           # actions 特殊语法
-          echo ::set-env name=packageName::$env:packageName
+          echo ::set-env name=packageName::$env:packageInfo
       # tag部署
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
