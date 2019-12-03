@@ -97,8 +97,8 @@ jobs:
           packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         uses: thedoctor0/zip-release@master
         with:
-          filename: ${{ packageName }}.zip
-          path: ${{ packageName }}
+          filename: ${{ env.packageName }}.zip
+          path: ${{ env.packageName }}
       # tag 创建Release
       - name: createRelease
         id: create_release
