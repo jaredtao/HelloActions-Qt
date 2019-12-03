@@ -81,8 +81,9 @@ jobs:
         env:
           packageInfo: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         run: |
+          $PACKAGE_INFO = ${env:packageInfo}
           # actions 特殊语法
-          echo ::set-env name=packageName::${env:packageInfo}
+          echo "::set-env name=packageName::$PACKAGE_INFO"
           Write-Host 'packageName:'${env:packageName}
       # tag部署
       - name: package
