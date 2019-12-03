@@ -82,8 +82,7 @@ jobs:
         shell: pwsh
         run: |
           # actions 特殊语法
-          $info = $env:packageInfo
-          echo ::set-env name=packageName::$info
+          echo ::set-env name=packageName::${env:packageInfo}
       # tag部署
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
@@ -91,15 +90,15 @@ jobs:
           VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
         shell: pwsh
         run: |
-          New-Item -ItemType Directory $env:packageName
-          Copy-Item bin\HelloActions-Qt.exe $env:packageName\
-          windeployqt --qmldir . $env:packageName\HelloActions-Qt.exe
+          New-Item -ItemType Directory ${env:packageName}
+          Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
+          windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
       # 打包
       - name: CompressArchive
         if: startsWith(github.event.ref, 'refs/tags/')
         shell: pwsh
         run: |
-          Compress-Archive -Path $env:packageName $env:packageName'.zip'
+          Compress-Archive -Path ${env:packageName} ${env:packageName}'.zip'
       # tag 创建Release
       - name: createRelease
         id: create_release
