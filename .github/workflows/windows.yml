@@ -91,14 +91,13 @@ jobs:
           xcopy /y bin\HelloActions-Qt.exe %packageName%\
           windeployqt --qmldir . %packageName%\HelloActions-Qt.exe
       # 打包
-      - name: Archive
+      - name: CompressArchive
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
           packageName: Windows-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: ${{ env.packageName }}.zip
-          path: ${{ env.packageName }}
+        shell: pwsh
+        run: |
+          Compress-Archive -Path $env:packageName $env:packageName'.zip'
       # tag 创建Release
       - name: createRelease
         id: create_release
