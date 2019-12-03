@@ -77,13 +77,12 @@ jobs:
       # 设置后续step通用的环境变量
       - name: setEnv
         if: startsWith(github.event.ref, 'refs/tags/')
-        env:
-          packageInfo: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
         shell: pwsh
         run: |
           # actions 特殊语法
-          echo ::set-env name=packageName::'$env:packageInfo'
-          Write-Host $env:packageName
+          $packageInfo = ${ matrix:qt_ver }-${ matrix:qt_target }-${ matrix:qt_arch }
+          echo ::set-env name=packageName::$packageInfo
+          Write-Host ${env:packageName}
       # tag部署
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
