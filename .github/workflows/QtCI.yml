@@ -42,7 +42,7 @@ jobs:
         if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
         with:
           path: Qt/${{ matrix.qt_ver }}/${{ matrix.qt_arch }}
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
       # 安装Qt
       - name: Install Qt
         # 缓存未命中时才安装
@@ -73,7 +73,6 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
           qmake
           nmake
-
       # tag打包
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
