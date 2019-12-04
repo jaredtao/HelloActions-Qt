@@ -148,7 +148,7 @@ jobs:
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: ${{ RUNNER_WORKSPACE }}/Qt/${{ matrix.qt_ver }}
+          path: Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - uses: actions/checkout@v1
         with:
@@ -178,7 +178,7 @@ jobs:
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: ${{ RUNNER_WORKSPACE }}/Qt/${{ matrix.qt_ver }}
+          path: Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - uses: actions/checkout@v1
         with:
