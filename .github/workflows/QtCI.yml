@@ -30,7 +30,7 @@ jobs:
     steps:
       # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
       - name: CacheQt
-        id: cacheqt
+        id: cacheQtWin
         uses: actions/cache@v1
         # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
         if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
@@ -39,7 +39,9 @@ jobs:
           key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
       - name: RestoreQtEnv
         # 缓存命中时,恢复Qt环境变量
-        if: steps.cacheqt.outputs.cache-hit == 'true'
+        if: steps.cacheQtWin.outputs.cache-hit == 'true'
+        env:
+          runnerPath: ${RUNNER_WORKSPACE}
         shell: pwsh
         run: |
           $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }/msvc2017_64
@@ -47,7 +49,7 @@ jobs:
           echo "::add-path::$qt5Dir/bin"
       - name: Install Qt
         # 缓存未命中时, 安装
-        if: steps.cacheqt.outputs.cache-hit != 'true'
+        if: steps.cacheQtWin.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
@@ -145,21 +147,23 @@ jobs:
         qt_ver: [5.9.8,5.12.6]
     steps:
       - name: CacheQt
-        id: cacheQt
+        id: cacheQtLin
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
           path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - name: RestoreQtEnv
-        if: steps.cacheqt.outputs.cache-hit == 'true'
+        if: steps.cacheQtMac.outputs.cache-hit == 'true'
+        env:
+          runnerPath: ${RUNNER_WORKSPACE}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }
+          $qt5Dir=${ env:runnerPath }/Qt/${ matrix.qt_ver }
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"              
       - name: Install Qt
-        if: steps.cacheqt.outputs.cache-hit != 'true'
+        if: steps.cacheQtLin.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
@@ -181,24 +185,26 @@ jobs:
         qt_ver: [5.9.8,5.12.6]
     steps:
       - name: CacheQt
-        id: cacheQt
+        id: cacheQtMac
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
           path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - name: RestoreQtEnv
-        if: steps.cacheqt.outputs.cache-hit == 'true'
+        if: steps.cacheQtMac.outputs.cache-hit == 'true'
+        env:
+          runnerPath: ${RUNNER_WORKSPACE}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }
+          $qt5Dir=${ env:runnerPath }/Qt/${ matrix.qt_ver }
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"          
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
       - name: Install Qt
-        if: steps.cacheqt.outputs.cache-hit != 'true'
+        if: steps.cacheQtMac.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
