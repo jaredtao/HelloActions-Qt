@@ -35,7 +35,7 @@ jobs:
         # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
         if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
         with:
-          path: Qt/${{ matrix.qt_ver }}/msvc2017_64
+          path: ../Qt/${{ matrix.qt_ver }}/msvc2017_64
           key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
       - uses: actions/checkout@v1
         with:
