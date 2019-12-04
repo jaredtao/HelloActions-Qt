@@ -45,7 +45,7 @@ jobs:
           qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ env:qtVer }/msvc2017_64
+          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }/msvc2017_64'
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"
       - name: Install Qt
@@ -161,7 +161,7 @@ jobs:
           qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:runnerPath }/Qt/${ env:qtVer }
+          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }'
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"              
       - name: Install Qt
@@ -200,7 +200,7 @@ jobs:
           qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:runnerPath }/Qt/${ env:qtVer }
+          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }'
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"          
       - uses: actions/checkout@v1
