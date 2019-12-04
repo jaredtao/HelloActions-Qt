@@ -1,40 +1,32 @@
 name: QtCI
 on: 
-  # push代码时触发workflow
   push:
-    # 忽略README.md
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
-  # pull_request时触发workflow
   pull_request:
-    # 忽略README.md
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
 jobs:
   windowsBuildJob:
     name: windows
-    # 运行平台， windows-latest目前是windows server 2019
     runs-on: windows-latest
     strategy:
-      # 矩阵配置
       matrix:
         qt_ver: [5.9.8,5.12.6]
         qt_target: [desktop]
         qt_arch: [win64_msvc2017_64, win32_msvc2017]
-        # 从矩阵中除外的配置
         exclude: 
-          # 不存在5.9.8-win32_msvc2017的版本
           - qt_ver: 5.9.8
             qt_arch: win32_msvc2017
-        # 额外配置
         include:
           - qt_arch: win64_msvc2017_64
-            vs_arch: x64
+            env:
+              vs_arch: x64
           - qt_arch: win32_msvc2017
-            vs_arch: x86
-    # 步骤
+            env:
+              vs_arch: x86
     steps:
       # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
       - name: CacheQt
@@ -45,11 +37,9 @@ jobs:
         with:
           path: Qt/${{ matrix.qt_ver }}/msvc2017_64
           key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
-      # 拉取代码
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
-      # 安装Qt
       - name: Install Qt
         # 缓存未命中时才安装
         if: steps.cacheqt.outputs.cache-hit != 'true'
