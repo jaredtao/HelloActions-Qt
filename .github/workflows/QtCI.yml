@@ -30,10 +30,6 @@ jobs:
             qt_arch: win32_msvc2017
     # 步骤
     steps:
-      # 拉取代码
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
       # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
       - name: CacheQt
         id: cacheqt
@@ -41,8 +37,13 @@ jobs:
         # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
         if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
         with:
-          path: Qt/${{ matrix.qt_ver }}/msvc2017_64
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}
+          path: ${{ env.RUNNER_WORKSPACE }}/Qt/${{ matrix.qt_ver }}/msvc2017_64
+          key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
+      # 拉取代码
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
       # 安装Qt
       - name: Install Qt
         # 缓存未命中时才安装
@@ -73,17 +74,17 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
           qmake
           nmake
-      # tag打包
-      - name: package
-        if: startsWith(github.event.ref, 'refs/tags/')
-        env:
-          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
-          packageName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory ${env:packageName}
-          Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
-          windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
+      # # tag打包
+      # - name: package
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+      #     packageName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+      #   shell: pwsh
+      #   run: |
+      #     New-Item -ItemType Directory ${env:packageName}
+      #     Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
+      #     windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
       # # tag存储
       # - name: uploadArtifact
       #   if: startsWith(github.event.ref, 'refs/tags/')
@@ -92,57 +93,57 @@ jobs:
       #     name: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
       #     path: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}.zip
       # 设置后续step通用的环境变量
-      - name: setEnv
-        if: startsWith(github.event.ref, 'refs/tags/')
-        shell: pwsh
-        env:
-          packageInfo: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-        run: |
-          $PACKAGE_INFO = ${env:packageInfo}
-          # actions 特殊语法
-          echo "::set-env name=packageName::$PACKAGE_INFO"
-          Write-Host 'packageName:'${env:packageName}
-      # tag部署
-      - name: package
-        if: startsWith(github.event.ref, 'refs/tags/')
-        env:
-          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory ${env:packageName}
-          Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
-          windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
-      # 打包
-      - name: CompressArchive
-        if: startsWith(github.event.ref, 'refs/tags/')
-        shell: pwsh
-        run: |
-          Compress-Archive -Path ${env:packageName} ${env:packageName}'.zip'
-      # tag 创建Release
-      - name: createRelease
-        id: createRelease
-        if: startsWith(github.event.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/create-release@v1.0.0
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: ${{ github.event.head_commit.message }}
-          draft: false
-          prerelease: false
-      # tag 上传Release
-      - name: uploadRelease
-        id: uploadRelease
-        if: startsWith(github.event.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: actions/upload-release-asset@v1.0.1
-        with:
-          upload_url: ${{ steps.createRelease.outputs.upload_url }}
-          asset_path: ./${{ env.packageName }}.zip
-          asset_name: ${{ env.packageName }}.zip
-          asset_content_type: application/zip
+      # - name: setEnv
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   shell: pwsh
+      #   env:
+      #     packageInfo: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+      #   run: |
+      #     $PACKAGE_INFO = ${env:packageInfo}
+      #     # actions 特殊语法
+      #     echo "::set-env name=packageName::$PACKAGE_INFO"
+      #     Write-Host 'packageName:'${env:packageName}
+      # # tag部署
+      # - name: package
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+      #   shell: pwsh
+      #   run: |
+      #     New-Item -ItemType Directory ${env:packageName}
+      #     Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
+      #     windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
+      # # 打包
+      # - name: CompressArchive
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   shell: pwsh
+      #   run: |
+      #     Compress-Archive -Path ${env:packageName} ${env:packageName}'.zip'
+      # # tag 创建Release
+      # - name: createRelease
+      #   id: createRelease
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   uses: actions/create-release@v1.0.0
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Release ${{ github.ref }}
+      #     body: ${{ github.event.head_commit.message }}
+      #     draft: false
+      #     prerelease: false
+      # # tag 上传Release
+      # - name: uploadRelease
+      #   id: uploadRelease
+      #   if: startsWith(github.event.ref, 'refs/tags/')
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   uses: actions/upload-release-asset@v1.0.1
+      #   with:
+      #     upload_url: ${{ steps.createRelease.outputs.upload_url }}
+      #     asset_path: ./${{ env.packageName }}.zip
+      #     asset_name: ${{ env.packageName }}.zip
+      #     asset_content_type: application/zip
   ubuntuBuildJob:
     name: ubuntu
     runs-on: ${{ matrix.os }}
@@ -151,16 +152,16 @@ jobs:
         os: [ubuntu-16.04,ubuntu-18.04]
         qt_ver: [5.9.8,5.12.6]
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
       - name: CacheQt
         id: cacheQt
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: Qt/${{ matrix.qt_ver }}
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}
+          path: ${{ env.RUNNER_WORKSPACE }}/Qt/${{ matrix.qt_ver }}
+          key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: Install Qt
         if: steps.cacheqt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
@@ -181,16 +182,16 @@ jobs:
         os: [macos-latest]
         qt_ver: [5.9.8,5.12.6]
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
       - name: CacheQt
         id: cacheQt
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: Qt/${{ matrix.qt_ver }}
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}
+          path: ${{ env.RUNNER_WORKSPACE }}/Qt/${{ matrix.qt_ver }}
+          key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: Install Qt
         if: steps.cacheqt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
