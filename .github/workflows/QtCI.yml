@@ -28,29 +28,8 @@ jobs:
     env:
       targetName: HelloActions-Qt.exe
     steps:
-      # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
-      - name: CacheQt
-        id: cacheQtWin
-        uses: actions/cache@v1
-        # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
-        if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
-        with:
-          path: ../Qt/${{ matrix.qt_ver }}/msvc2017_64
-          key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
-      - name: RestoreQtEnv
-        # 缓存命中时,恢复Qt环境变量
-        if: steps.cacheQtWin.outputs.cache-hit == 'true'
-        env:
-          runnerPath: ${RUNNER_WORKSPACE}
-          qtVer: ${{matrix.qt_ver}}
-        shell: pwsh
-        run: |
-          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }/msvc2017_64'
-          echo "::set-env name=Qt5_Dir::$qt5Dir"
-          echo "::add-path::$qt5Dir/bin"
+      #安装Qt
       - name: Install Qt
-        # 缓存未命中时, 安装
-        if: steps.cacheQtWin.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
@@ -60,7 +39,7 @@ jobs:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
-      # 条件编译msvc
+      # 编译msvc
       - name: build-msvc
         shell: cmd
         env:
@@ -146,29 +125,12 @@ jobs:
       matrix:
         os: [ubuntu-16.04,ubuntu-18.04]
         qt_ver: [5.9.8,5.12.6]
-    steps:
-      - name: CacheQt
-        id: cacheQtLin
-        uses: actions/cache@v1
-        if: matrix.qt_ver == '5.12.6'
-        with:
-          path: ../Qt/${{ matrix.qt_ver }}
-          key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
-      - name: RestoreQtEnv
-        if: steps.cacheQtMac.outputs.cache-hit == 'true'
-        env:
-          runnerPath: ${RUNNER_WORKSPACE}
-          qtVer: ${{matrix.qt_ver}}
-        shell: pwsh
-        run: |
-          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }'
-          echo "::set-env name=Qt5_Dir::$qt5Dir"
-          echo "::add-path::$qt5Dir/bin"              
+    steps:         
       - name: Install Qt
-        if: steps.cacheQtLin.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
+      # Ubuntu 安装 OpenGL相关库
       - name: ubuntu install GL library
         run: sudo apt-get install -y libglew-dev libglfw3-dev
       - uses: actions/checkout@v1
@@ -186,31 +148,13 @@ jobs:
         os: [macos-latest]
         qt_ver: [5.9.8,5.12.6]
     steps:
-      - name: CacheQt
-        id: cacheQtMac
-        uses: actions/cache@v1
-        if: matrix.qt_ver == '5.12.6'
-        with:
-          path: ../Qt/${{ matrix.qt_ver }}
-          key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
-      - name: RestoreQtEnv
-        if: steps.cacheQtMac.outputs.cache-hit == 'true'
-        env:
-          runnerPath: ${RUNNER_WORKSPACE}
-          qtVer: ${{matrix.qt_ver}}
-        shell: pwsh
-        run: |
-          $qt5Dir='${ env:runnerPath }/Qt/${ env:qtVer }'
-          echo "::set-env name=Qt5_Dir::$qt5Dir"
-          echo "::add-path::$qt5Dir/bin"          
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
       - name: Install Qt
-        if: steps.cacheQtMac.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: build macos
         run: |
           qmake
@@ -247,9 +191,6 @@ jobs:
         # android_arm64_v8a 暂时不支持. install-qt-action 依赖的aqtinstall版本为0.5*,需要升级
         # qt_arch: [android_x86,android_armv7,android_arm64_v8a]
         qt_arch: [android_x86,android_armv7]
-        # exclude:
-        #   - qt_ver: 5.9.8
-        #     qt_arch: android_arm64_v8a
     steps:
       - uses: actions/checkout@v1
         with:
@@ -266,10 +207,3 @@ jobs:
           export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
           qmake
           make
-
-  # releaseJob:
-  #   name: release
-  #   runs-on: windows-latest
-  #   need: [windowsBuildJob]
-
-
