@@ -48,7 +48,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           qmake
           nmake
-      # tag打包
+      # tag 打包
       - name: package
         if: startsWith(github.event.ref, 'refs/tags/')
         env:
@@ -82,17 +82,29 @@ jobs:
           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
-      # 重定向upload_url到环境变量uploadUrl。如果上一步创建失败，通过github-api获取tag对应的upload_url。
+      # 重定向upload_url到环境变量uploadUrl。
       - name: getLatestTagRelease
-        # 上一步无论成功还是失败都
+        # tag 上一步无论成功还是失败都执行
         if: startsWith(github.event.ref, 'refs/tags/') && (failure() || success())
         shell: pwsh
         env:
-          githubUrl: ${{ github.event.repository.full_name }}
+          githubFullName: ${{ github.event.repository.full_name }}
           upUrl: ${{ steps.createReleaseWin.outputs.upload_url }}
           ref: ${{ github.event.ref }}
         run: |
-          .github/scripts/getUploadUrl.ps1 ${env:githubUrl} ${env:upUrl} ${env:ref}
+          # upUrl不为空，导出就完事
+          if (${env:upUrl}.Length -gt 0) {
+              $v=${env:upUrl}
+              echo "::set-env name=uploadUrl::$v"
+              return
+          } 
+          [string]$tag = ${env:ref}.Substring(${env:ref}.LastIndexOf('/') + 1)
+          [string]$url = 'https://api.github.com/repos/' + ${env:githubFullName} + '/releases/tags/' + ${tag}
+          $response = Invoke-RestMethod -Uri $url -Method Get
+          [string]$latestUpUrl = $response.upload_url
+          Write-Host 'latestUpUrl:'$latestUpUrl
+          echo "::set-env name=uploadUrl::$latestUpUrl"
+          Write-Host 'env uploadUrl:'${env:uploadUrl}
       # tag 上传Release
       - name: uploadRelease
         id: uploadRelease
