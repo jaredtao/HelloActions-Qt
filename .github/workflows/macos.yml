@@ -18,31 +18,13 @@ jobs:
         qt_ver: [5.9.8,5.12.6]
     steps:
       - name: Install Qt
-        if: steps.cacheqt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
-          # Directory to install Qt
-          #dir: # optional
-          # Version of Qt to install
           version: ${{ matrix.qt_ver }}
-          # optional, default is 5.12.6
-          # Host platform
-          #host: # optional
-          # Target platform for build
-          #target: # optional, default is desktop
-          # Architecture for Windows/Android
-          #arch: # optional
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
       - name: build macos
         run: |
-          export PATH=$PATH:$Qt5_Dir
           qmake
           make
-      - name: CacheQt
-        uses: actions/cache@v1
-        if: matrix.qt_ver == '5.12.6'
-        with:
-          path: ${{ env.Qt5_Dir }}
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}

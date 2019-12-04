@@ -29,11 +29,5 @@ jobs:
           fetch-depth: 1
       - name: build ios
         run: |
-          export PATH=$PATH:$Qt5_Dir
           qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
           make
-      # - name: CacheQt
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ${{ env.Qt5_Dir }}
-      #     key: ${{ runner.OS }}-Qt

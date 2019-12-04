@@ -35,6 +35,12 @@ jobs:
           #   qt_arch: win32_mingw73
           # - qt_ver: 5.12.6
           #   qt_arch: win32_mingw53
+        # 额外设置msvc_arch
+        include:
+          - qt_arch: win64_msvc2017_64
+            msvc_arch: x64
+          - qt_arch: win32_msvc2017
+            msvc_arch: x86
     # 步骤
     steps:
       # 安装Qt
@@ -54,34 +60,12 @@ jobs:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
-      # 条件编译msvc-x64
-      - name: build-msvc-x64
-        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win64')
+      # 编译msvc
+      - name: build-msvc
         shell: cmd
+        env:
+          vc_arch: ${{ matrix.msvc_arch }}
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           qmake
           nmake
-      # 条件编译msvc-x86
-      - name: build-msvc-x86
-        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win32')
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
-          qmake
-          nmake
-      # 条件编译mingw(用不了)
-      - name: build-mingw
-        if: contains(matrix.qt_arch,'mingw')
-        shell: cmd
-        run: |
-          qmake
-          mingw32-make
-      # 条件缓存
-      - name: CacheQt
-        uses: actions/cache@v1
-        # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
-        if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
-        with:
-          path: ${{ env.Qt5_Dir }}
-          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
