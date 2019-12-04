@@ -1,0 +1,264 @@
+name: QtCI
+on: 
+  # push代码时触发workflow
+  push:
+    # 忽略README.md
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+  # pull_request时触发workflow
+  pull_request:
+    # 忽略README.md
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+jobs:
+  windowsBuildJob:
+    name: windowsBuildJob
+    # 运行平台， windows-latest目前是windows server 2019
+    runs-on: windows-latest
+    strategy:
+      # 矩阵配置
+      matrix:
+        qt_ver: [5.9.8,5.12.6]
+        qt_target: [desktop]
+        qt_arch: [win64_msvc2017_64, win32_msvc2017]
+        # 从矩阵中除外的配置
+        exclude: 
+          # 不存在5.9.8-win32_msvc2017的版本
+          - qt_ver: 5.9.8
+            qt_arch: win32_msvc2017
+    # 步骤
+    steps:
+      # 拉取代码
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
+      - name: CacheQt
+        id: cacheqt
+        uses: actions/cache@v1
+        # cache有大小限制，单个缓存不超过400M，整个仓库的缓存不超过2G。所以这里只缓存一个特定版本。
+        if: matrix.qt_ver == '5.12.6' && matrix.qt_arch == 'win64_msvc2017_64'
+        with:
+          path: ${{ env.Qt5_Dir }}
+          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+      # 安装Qt
+      - name: Install Qt
+        # 缓存未命中时才安装
+        if: steps.cacheqt.outputs.cache-hit != 'true'
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          target: ${{ matrix.qt_target }}
+          # Architecture for Windows/Android
+          arch: ${{ matrix.qt_arch }}
+
+      # 条件编译msvc-x64
+      - name: build-msvc-x64
+        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win64')
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          qmake
+          nmake
+      # 条件编译msvc-x86
+      - name: build-msvc-x86
+        if: contains(matrix.qt_arch,'msvc') && contains(matrix.qt_arch,'win32')
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+          qmake
+          nmake
+
+      # tag打包
+      - name: package
+        if: startsWith(github.event.ref, 'refs/tags/')
+        env:
+          VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+          packageName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory ${env:packageName}
+          Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
+          windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
+      # tag存储
+      - name: uploadArtifact
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          path: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}.zip
+  linuxBuildJob:
+    name: linuxBuild
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04,ubuntu-18.04]
+        qt_ver: [5.9.8,5.12.6]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: CacheQt
+        id: cacheQt
+        uses: actions/cache@v1
+        if: matrix.qt_ver == '5.12.6'
+        with:
+          path: ${{ env.Qt5_Dir }}
+          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}
+      - name: Install Qt
+        if: steps.cacheqt.outputs.cache-hit != 'true'
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          version: ${{ matrix.qt_ver }}
+      - name: ubuntu install GL library
+        run: sudo apt-get install -y libglew-dev libglfw3-dev
+      - name: build ubuntu
+        run: |
+          export PATH=$PATH:$Qt5_Dir
+          qmake
+          make
+  macosBuildJob:
+    name: macosBuild
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        qt_ver: [5.9.8,5.12.6]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: CacheQt
+        id: cacheQt
+        uses: actions/cache@v1
+        if: matrix.qt_ver == '5.12.6'
+        with:
+          path: ${{ env.Qt5_Dir }}
+          key: ${{ runner.OS }}-Qt-${{ matrix.qt_ver }}
+      - name: Install Qt
+        if: steps.cacheqt.outputs.cache-hit != 'true'
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          version: ${{ matrix.qt_ver }}
+      - name: build macos
+        run: |
+          export PATH=$PATH:$Qt5_Dir
+          qmake
+          make
+  iosBuildJob:
+    name: iosBuild
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        qt_ver: [5.12.6]
+        qt_target: [ios]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          version: ${{ matrix.qt_ver }}
+          target: ${{ matrix.qt_target }}
+      - name: build ios
+        run: |
+          export PATH=$PATH:$Qt5_Dir
+          qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
+          make
+  androidBuildJob:
+    name: androidBuild
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        qt_ver: [5.12.6]
+        qt_target: [android]
+        # android_arm64_v8a 暂时不支持. install-qt-action 依赖的aqtinstall版本为0.5*,需要升级
+        # qt_arch: [android_x86,android_armv7,android_arm64_v8a]
+        qt_arch: [android_x86,android_armv7]
+        # exclude:
+        #   - qt_ver: 5.9.8
+        #     qt_arch: android_arm64_v8a
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.0.0
+        with:
+          version: ${{ matrix.qt_ver }}
+          target: ${{ matrix.qt_target }}
+          arch: ${{ matrix.qt_arch }}
+      - name: build android
+        run: |
+          export PATH=$PATH:$Qt5_Dir
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
+          export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
+          qmake
+          make
+
+  # releaseJob:
+  #   name: release
+  #   runs-on: windows-latest
+  #   need: [windowsBuildJob]
+  #   steps:
+  #     # 设置后续step通用的环境变量
+  #     - name: setEnv
+  #       if: startsWith(github.event.ref, 'refs/tags/')
+  #       shell: pwsh
+  #       env:
+  #         packageInfo: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+  #       run: |
+  #         $PACKAGE_INFO = ${env:packageInfo}
+  #         # actions 特殊语法
+  #         echo "::set-env name=packageName::$PACKAGE_INFO"
+  #         Write-Host 'packageName:'${env:packageName}
+  #     # tag部署
+  #     - name: package
+  #       if: startsWith(github.event.ref, 'refs/tags/')
+  #       env:
+  #         VCINSTALLDIR: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC'
+  #       shell: pwsh
+  #       run: |
+  #         New-Item -ItemType Directory ${env:packageName}
+  #         Copy-Item bin\HelloActions-Qt.exe ${env:packageName}\
+  #         windeployqt --qmldir . ${env:packageName}\HelloActions-Qt.exe
+  #     # 打包
+  #     - name: CompressArchive
+  #       if: startsWith(github.event.ref, 'refs/tags/')
+  #       shell: pwsh
+  #       run: |
+  #         Compress-Archive -Path ${env:packageName} ${env:packageName}'.zip'
+  #     # tag 创建Release
+  #     - name: createRelease
+  #       id: createRelease
+  #       if: startsWith(github.event.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       uses: actions/create-release@v1.0.0
+  #       with:
+  #         tag_name: ${{ github.ref }}
+  #         release_name: Release ${{ github.ref }}
+  #         body: ${{ github.event.head_commit.message }}
+  #         draft: false
+  #         prerelease: false
+  #     # tag 上传Release
+  #     - name: uploadRelease
+  #       id: uploadRelease
+  #       if: startsWith(github.event.ref, 'refs/tags/')
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       uses: actions/upload-release-asset@v1.0.1
+  #       with:
+  #         upload_url: ${{ steps.createRelease.outputs.upload_url }}
+  #         asset_path: ./${{ env.packageName }}.zip
+  #         asset_name: ${{ env.packageName }}.zip
+  #         asset_content_type: application/zip
+
