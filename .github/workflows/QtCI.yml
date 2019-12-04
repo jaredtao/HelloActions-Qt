@@ -69,10 +69,29 @@ jobs:
           echo "::set-env name=packageName::$name"
           # 打印环境变量packageName
           Write-Host 'packageName:'${env:packageName}
+      # tag 查询github-Release
+      - name: queryReleaseWin
+        id: queryReleaseWin
+        if: startsWith(github.event.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          githubFullName: ${{ github.event.repository.full_name }}
+          ref: ${{ github.event.ref }}
+        run: |
+          [string]$tag = ${env:ref}.Substring(${env:ref}.LastIndexOf('/') + 1)
+          [string]$url = 'https://api.github.com/repos/' + ${env:githubFullName} + '/releases/tags/' + ${tag}
+          $response = Invoke-RestMethod -Uri $url -Method Get
+          [string]$latestUpUrl = $response.upload_url
+          Write-Host 'latestUpUrl:'$latestUpUrl
+          if ($latestUpUrl.Length -eq 0) {
+            # 没查到，输出
+            echo "::set-output name=needCreateRelease::true"  
+            Write-Host 'env needCreateRelease:'${env:needCreateRelease}
+          }
       # tag 创建github-Release
       - name: createReleaseWin
         id: createReleaseWin
-        if: startsWith(github.event.ref, 'refs/tags/')
+        if: startsWith(github.event.ref, 'refs/tags/') && steps.queryReleaseWin.output.needCreateRelease == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/create-release@v1.0.0
@@ -85,7 +104,7 @@ jobs:
       # 重定向upload_url到环境变量uploadUrl。
       - name: getLatestTagRelease
         # tag 上一步无论成功还是失败都执行
-        if: startsWith(github.event.ref, 'refs/tags/') && (failure() || success())
+        if: startsWith(github.event.ref, 'refs/tags/')
         shell: pwsh
         env:
           githubFullName: ${{ github.event.repository.full_name }}
