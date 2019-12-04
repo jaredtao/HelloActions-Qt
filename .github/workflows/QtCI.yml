@@ -37,17 +37,26 @@ jobs:
         with:
           path: ../Qt/${{ matrix.qt_ver }}/msvc2017_64
           key: Qt-${{ matrix.qt_ver }}-${{ matrix.qt_arch }}-${{ runner.OS }}
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+      - name: RestoreQtEnv
+        # 缓存命中时,恢复Qt环境变量
+        if: steps.cacheqt.outputs.cache-hit == 'true'
+        shell: pwsh
+        run: |
+          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }/msvc2017_64
+          echo "::set-env name=Qt5_Dir::$qt5Dir"
+          echo "::add-path::$qt5Dir/bin"
       - name: Install Qt
-        # 缓存未命中时才安装
+        # 缓存未命中时, 安装
         if: steps.cacheqt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
         with:
           version: ${{ matrix.qt_ver }}
           target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
+      # 获取代码
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       # 条件编译msvc
       - name: build-msvc
         shell: cmd
@@ -142,9 +151,13 @@ jobs:
         with:
           path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+      - name: RestoreQtEnv
+        if: steps.cacheqt.outputs.cache-hit == 'true'
+        shell: pwsh
+        run: |
+          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }
+          echo "::set-env name=Qt5_Dir::$qt5Dir"
+          echo "::add-path::$qt5Dir/bin"              
       - name: Install Qt
         if: steps.cacheqt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v2.0.0
@@ -152,9 +165,11 @@ jobs:
           version: ${{ matrix.qt_ver }}
       - name: ubuntu install GL library
         run: sudo apt-get install -y libglew-dev libglfw3-dev
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1          
       - name: build ubuntu
         run: |
-          export PATH=$PATH:$Qt5_Dir
           qmake
           make
   macosBuildJob:
@@ -172,6 +187,13 @@ jobs:
         with:
           path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
+      - name: RestoreQtEnv
+        if: steps.cacheqt.outputs.cache-hit == 'true'
+        shell: pwsh
+        run: |
+          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }
+          echo "::set-env name=Qt5_Dir::$qt5Dir"
+          echo "::add-path::$qt5Dir/bin"          
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
@@ -182,7 +204,6 @@ jobs:
           version: ${{ matrix.qt_ver }}
       - name: build macos
         run: |
-          export PATH=$PATH:$Qt5_Dir
           qmake
           make
   iosBuildJob:
@@ -204,7 +225,6 @@ jobs:
           target: ${{ matrix.qt_target }}
       - name: build ios
         run: |
-          export PATH=$PATH:$Qt5_Dir
           qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
           make
   androidBuildJob:
@@ -233,7 +253,6 @@ jobs:
           arch: ${{ matrix.qt_arch }}
       - name: build android
         run: |
-          export PATH=$PATH:$Qt5_Dir
           export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
           qmake
