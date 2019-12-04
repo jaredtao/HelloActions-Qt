@@ -45,8 +45,6 @@ jobs:
     steps:
       # 安装Qt
       - name: Install Qt
-        # 缓存未命中时才安装
-        if: steps.cacheqt.outputs.cache-hit != 'true'
         # 使用外部action。这个action专门用来安装Qt
         uses: jurplel/install-qt-action@v2.0.0
         with:
