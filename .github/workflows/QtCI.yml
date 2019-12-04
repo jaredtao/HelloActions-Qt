@@ -42,9 +42,10 @@ jobs:
         if: steps.cacheQtWin.outputs.cache-hit == 'true'
         env:
           runnerPath: ${RUNNER_WORKSPACE}
+          qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ matrix.qt_ver }/msvc2017_64
+          $qt5Dir=${ env:RUNNER_WORKSPACE }/Qt/${ env:qtVer }/msvc2017_64
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"
       - name: Install Qt
@@ -157,9 +158,10 @@ jobs:
         if: steps.cacheQtMac.outputs.cache-hit == 'true'
         env:
           runnerPath: ${RUNNER_WORKSPACE}
+          qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:runnerPath }/Qt/${ matrix.qt_ver }
+          $qt5Dir=${ env:runnerPath }/Qt/${ env:qtVer }
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"              
       - name: Install Qt
@@ -195,9 +197,10 @@ jobs:
         if: steps.cacheQtMac.outputs.cache-hit == 'true'
         env:
           runnerPath: ${RUNNER_WORKSPACE}
+          qtVer: ${{matrix.qt_ver}}
         shell: pwsh
         run: |
-          $qt5Dir=${ env:runnerPath }/Qt/${ matrix.qt_ver }
+          $qt5Dir=${ env:runnerPath }/Qt/${ env:qtVer }
           echo "::set-env name=Qt5_Dir::$qt5Dir"
           echo "::add-path::$qt5Dir/bin"          
       - uses: actions/checkout@v1
