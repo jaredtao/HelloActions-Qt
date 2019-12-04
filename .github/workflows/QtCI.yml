@@ -84,8 +84,8 @@ jobs:
           prerelease: false
       # 重定向upload_url到环境变量uploadUrl。如果上一步创建失败，通过github-api获取tag对应的upload_url。
       - name: getLatestTagRelease
-        # 上一步无论成功还是失败
-        if: startsWith(github.event.ref, 'refs/tags/') && (failed() || succeed())
+        # 上一步无论成功还是失败都
+        if: startsWith(github.event.ref, 'refs/tags/') && (failure() || success())
         shell: pwsh
         env:
           githubUrl: ${{ github.event.repository.full_name }}
