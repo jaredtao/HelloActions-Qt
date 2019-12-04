@@ -88,7 +88,6 @@ jobs:
             Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
             # 没查到，输出
             echo "::set-output name=needCreateRelease::true"  
-            Write-Host 'env needCreateRelease:'${env:needCreateRelease}
             return
           }
           [string]$latestUpUrl = $response.upload_url
@@ -96,12 +95,11 @@ jobs:
           if ($latestUpUrl.Length -eq 0) {
             # 没查到，输出
             echo "::set-output name=needCreateRelease::true"  
-            Write-Host 'env needCreateRelease:'${env:needCreateRelease}
           }
       # tag 创建github-Release
       - name: createReleaseWin
         id: createReleaseWin
-        if: startsWith(github.event.ref, 'refs/tags/') && steps.queryReleaseWin.output.needCreateRelease == 'true'
+        if: startsWith(github.event.ref, 'refs/tags/') && steps.queryReleaseWin.outputs.needCreateRelease == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/create-release@v1.0.0
