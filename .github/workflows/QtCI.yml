@@ -22,11 +22,11 @@ jobs:
             qt_arch: win32_msvc2017
         include:
           - qt_arch: win64_msvc2017_64
-            env:
-              vs_arch: x64
+            msvc_arch: x64
           - qt_arch: win32_msvc2017
-            env:
-              vs_arch: x86
+            msvc_arch: x86
+    env:
+      targetName: HelloActions-Qt.exe
     steps:
       # 条件缓存 (这里是恢复缓存。steps的最后会自动追加一个PostCatch，用来存储)
       - name: CacheQt
@@ -51,8 +51,10 @@ jobs:
       # 条件编译msvc
       - name: build-msvc
         shell: cmd
+        env:
+          vc_arch: ${{ matrix.msvc_arch }}
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vs_arch%
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %vc_arch%
           qmake
           nmake
       # # tag打包
@@ -138,7 +140,7 @@ jobs:
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: Qt/${{ matrix.qt_ver }}
+          path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - uses: actions/checkout@v1
         with:
@@ -168,7 +170,7 @@ jobs:
         uses: actions/cache@v1
         if: matrix.qt_ver == '5.12.6'
         with:
-          path: Qt/${{ matrix.qt_ver }}
+          path: ../Qt/${{ matrix.qt_ver }}
           key: Qt-${{ matrix.qt_ver }}-${{ runner.OS }}
       - uses: actions/checkout@v1
         with:
