@@ -47,7 +47,31 @@
 
 ## 原理
 
-(待更新)
+可以参考博客文章
+
+https://jaredtao.github.io/2019/11/19/Qt%E4%BD%BF%E7%94%A8github-Actions%E8%87%AA%E5%8A%A8%E5%8C%96%E7%BC%96%E8%AF%91/
+
+### Qt项目的编译流程
+
+1. 安装Qt环境
+
+这一步用Actions模板：jurplel/install-qt-action
+
+2. 获取项目代码
+
+这一步用Actions官方核心模板：actions/checkout@v1
+
+3. 执行qmake、make
+
+这一步用自定义脚本，可以换成qbs、cmake、gn、ninja等构建工具
+
+4. 执行test
+
+这一步可以引入单元测试、自动化UI测试等。以后再说。
+
+5. 执行deployment
+
+待更新
 
 ## 答疑和技术支持
 
