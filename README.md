@@ -67,7 +67,7 @@ https://jaredtao.github.io/2019/11/19/Qt%E4%BD%BF%E7%94%A8github-Actions%E8%87%A
 
 4. 执行test
 
-这一步可以引入单元测试、自动化UI测试等。
+这一步可以引入单元测试、自动化UI测试等。(暂不提供方案)
 
 5. 执行deployment
 
