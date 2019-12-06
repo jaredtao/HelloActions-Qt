@@ -45,6 +45,15 @@
 [wiki-links]: https://github.com/jaredtao/HelloActions-Qt/wiki "wiki"
 [wiki-badge]: https://img.shields.io/badge/github-wiki-181717.svg?maxAge=60 "wiki"
 
+## 项目进度
+
+|Tag|功能|
+|--|--|
+|0.1.0|五个平台都能够自动编译|
+|0.1.1|配置文件拆分|
+|0.1.2|Windows可以自动打包、发布|
+|0.1.3|Windows和MacOS可以同时自动打包、发布|
+
 ## 原理
 
 可以参考博客文章
