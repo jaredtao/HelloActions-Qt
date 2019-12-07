@@ -57,9 +57,13 @@
 ## 原理
 
 可以参考博客文章或知乎专栏
+
 [博客-Qt自动化编译](https://jaredtao.github.io/2019/11/19/Qt%E4%BD%BF%E7%94%A8github-Actions%E8%87%AA%E5%8A%A8%E5%8C%96%E7%BC%96%E8%AF%91/)
+
 [博客-自动化发布](https://jaredtao.github.io/2019/12/03/Qt%E4%BD%BF%E7%94%A8github-Actions%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8F%91%E8%A1%8C/)
+
 [知乎-自动化编译](https://zhuanlan.zhihu.com/p/92733295)
+
 [知乎-自动化发布](https://zhuanlan.zhihu.com/p/95926317)
 
 
@@ -83,7 +87,7 @@
 
 5. 执行deployment
 
-待更新
+这一步执行发布流程，可以参考博客教程
 
 ## 答疑和技术支持
 
