@@ -30,7 +30,7 @@
 [ios-badge]: https://github.com/JaredTao/HelloActions-Qt/workflows/IOS/badge.svg "IOS"
 
 [release-link]: https://github.com/jaredtao/HelloActions-Qt/releases "Release status"
-[release-badge]: https://img.shields.io/github/release/jaredtao/HelloActions-Qt.svg?style=flat-square" "Release status"
+[release-badge]: https://img.shields.io/github/release/jaredtao/HelloActions-Qt.svg?style=flat-square "Release status"
 
 [download-link]: https://github.com/jaredtao/HelloActions-Qt/releases/latest "Download status"
 [download-badge]: https://img.shields.io/github/downloads/jaredtao/HelloActions-Qt/total.svg?style=flat-square "Download status"
