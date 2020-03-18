@@ -56,7 +56,7 @@ jobs:
       - name: Install Qt
         # if: steps.WindowsCacheQt.outputs.cache-hit != 'true'
         # 使用外部action。这个action专门用来安装Qt
-        uses: jurplel/install-qt-action@v2.5.1
+        uses: jurplel/install-qt-action@v2.5.3
         with:
           # Version of Qt to install
           version: ${{ matrix.qt_ver }}
