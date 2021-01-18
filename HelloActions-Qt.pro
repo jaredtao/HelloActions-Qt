@@ -22,6 +22,8 @@ QML_IMPORT_PATH =
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
-
-DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/)
-
+CONFIG(debug,debug|release) {
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/debug)
+} else {
+    DESTDIR = $$absolute_path($${_PRO_FILE_PWD_}/bin/release)
+}
