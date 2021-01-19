@@ -24,7 +24,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           # Target platform for build
           target: ${{ matrix.qt_target }}
-          mirror: 'https://mirrors.cloud.tencent.com/qt/'          
+          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'      
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1

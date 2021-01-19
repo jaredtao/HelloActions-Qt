@@ -28,7 +28,7 @@ jobs:
           target: ${{ matrix.qt_target }}
           # Architecture for Windows/Android
           arch: ${{ matrix.qt_arch }}
-          mirror: 'https://mirrors.cloud.tencent.com/qt/'          
+          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'      
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
