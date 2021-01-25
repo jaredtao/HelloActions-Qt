@@ -27,8 +27,7 @@ jobs:
           # Target platform for build
           target: ${{ matrix.qt_target }}
           # Architecture for Windows/Android
-          arch: ${{ matrix.qt_arch }}
-          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'      
+          arch: ${{ matrix.qt_arch }}  
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1

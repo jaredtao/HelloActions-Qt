@@ -65,7 +65,6 @@ jobs:
           arch: ${{ matrix.qt_arch }}
           aqtversion: '==0.10.0'
           cached: 'false'
-          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
       # 拉取代码
       - uses: actions/checkout@v1
         with:
