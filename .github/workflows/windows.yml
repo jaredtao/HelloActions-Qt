@@ -12,6 +12,8 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
+  # 手动触发workflow
+  workflow_dispatch:
 jobs:
   build:
     name: Build
