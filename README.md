@@ -143,7 +143,7 @@ dll，以此来保证在大部分Windows环境都能正常运行。
 
 2. 获取项目代码
 
-这一步用Actions官方核心模板：actions/checkout@v1
+这一步用Actions官方核心模板：actions/checkout@v2
 
 3. 执行qmake、make
 

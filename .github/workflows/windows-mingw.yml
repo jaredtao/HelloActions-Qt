@@ -75,7 +75,7 @@ jobs:
           tools: ${{ matrix.qt_tools }}
           aqtversion: '==0.10.0'
           cached: 'false'
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 1
       - name: Qt 5 environment configuration
