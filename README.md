@@ -71,6 +71,7 @@ windows宿主平台是server 2019,支持的目标环境包括:
 * Qt5.12.10-msvc2017-x64
 * Qt5.15.2-msvc2019-x86
 * Qt5.15.2-msvc2019-x64
+* Qt6.0.0-msvc2019-x64
 
 ### MacOS
 
