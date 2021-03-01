@@ -2,14 +2,15 @@ name: Ubuntu
 # Qt官方没有linux平台的x86包
 on: 
   push:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/ubuntu.yml'
   pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-  workflow_dispatch:
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/ubuntu.yml' 
 jobs:
   build:
     name: Build

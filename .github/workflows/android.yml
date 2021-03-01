@@ -1,14 +1,15 @@
 name: Android
 on: 
   push:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'      
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/android.yml'
   pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'      
-  workflow_dispatch:
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/android.yml'  
 jobs:
   build:
     name: Build

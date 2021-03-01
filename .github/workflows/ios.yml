@@ -1,12 +1,15 @@
 name: IOS
 on: 
   push:
-    paths-ignore:
-      - 'README.md'
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/ios.yml'
   pull_request:
-    paths-ignore:
-      - 'README.md'
-  workflow_dispatch:
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/ios.yml' 
 jobs:
   build:
     name: Build

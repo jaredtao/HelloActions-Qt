@@ -1,14 +1,15 @@
 name: Windows MinGW
 on: 
   push:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/windows-mingw.yml'
   pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-  workflow_dispatch:
+    paths:
+      - '*.pro'
+      - 'src/**'
+      - '.github/workflows/windows-mingw.yml' 
 jobs:
   build:
     name: Build
