@@ -41,8 +41,8 @@ jobs:
       # 上传artifacts          
       - uses: actions/upload-artifact@v2
         with:
-          name: ${targetName}_${{matrix.qt_ver}}.zip
-          path: bin/release/${targetName}.app
+          name: ${{ env.targetName }}_${{matrix.qt_ver}}.zip
+          path: bin/release/${{ env.targetName }}.app
       # tag 上传Release
       - name: uploadRelease
         if: startsWith(github.event.ref, 'refs/tags/')
