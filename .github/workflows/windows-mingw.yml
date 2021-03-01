@@ -68,12 +68,11 @@ jobs:
       targetName: HelloActions-Qt.exe
     steps:
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2.10.0
+        uses: jurplel/install-qt-action@v2.13.0
         with:
           version: ${{ matrix.qt_ver }}
           arch: ${{ matrix.qt_arch }}
           tools: ${{ matrix.qt_tools }}
-          aqtversion: '==0.10.0'
           cached: 'false'
       - uses: actions/checkout@v2
         with:
