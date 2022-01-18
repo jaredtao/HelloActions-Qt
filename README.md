@@ -63,7 +63,7 @@
 
 ### Windows 
 
-windows宿主平台是server 2019,支持的目标环境包括:
+Windows 宿主平台是Server 2019,支持的目标环境包括:
 
 * Qt5.9.9-msvc2015-x86
 * Qt5.9.9-msvc2017-x64
@@ -72,17 +72,37 @@ windows宿主平台是server 2019,支持的目标环境包括:
 * Qt5.15.2-msvc2019-x86
 * Qt5.15.2-msvc2019-x64
 * Qt6.0.0-msvc2019-x64
+* Qt6.2.2-msvc2019-x64
 
+另外，感谢热心网友[Mozi](https://github.com/pzhlkj6612)补充mingw版本
+
+* Qt5.9.9 mingw53_32
+* Qt5.10.1 mingw53_32
+* Qt5.11.3 mingw53_32
+* Qt5.12.10 mingw73_32
+* Qt5.12.10 mingw73_64 
+* Qt5.13.2 mingw73_32
+* Qt5.13.2 mingw73_64
+* Qt5.14.2 mingw73_32
+* Qt5.14.2 mingw73_64
+* Qt5.15.2 mingw81_32
+* Qt5.15.2 mingw81_64
+* Qt6.0.0 mingw81_64
+  
+
+* Qt6.2.2 mingw90_64
+  
 ### MacOS
 
-MacOS平台以macos-10.15为主, 11.0存在一些问题,尚未解决,暂不公开。
+MacOS平台以MacOS 10.15 为主, 11.0存在一些问题,尚未解决,暂不公开。
 
 Qt版本包括：
 
 * Qt 5.9.9
 * Qt 5.12.10
 * Qt 5.15.2
-
+* Qt 6.2.2
+  
 架构都是clang_64
 
 ### Ubuntu
@@ -94,14 +114,44 @@ ubuntu-18.04
 * Qt 5.9.9
 * Qt 5.12.10
 * Qt 5.15.2
- 
+  
 ubuntu-20.04
 
 * Qt 5.9.9
 * Qt 5.12.10
 * Qt 5.15.2
-  
+* Qt 6.2.2 
+    
 架构都是gcc_64
+
+### Android
+
+Android的宿主平台用Ubuntu 20.04，
+
+验证通过的平台如下：
+
+* Qt5.12.10 android x86
+* Qt5.12.10 android armv7
+* Qt5.12.10 android arm64_v8a
+* Qt5.15.2 android (default, any-multi)
+  
+android 仅验证编译，暂未处理部署。
+
+Qt6.2.2 工具包存在映射问题，暂不能用。
+
+### IOS
+
+
+ios 的宿主平台用 macos 10.15
+
+验证通过的平台如下:
+
+* Qt5.12.10
+* Qt5.15.2
+
+ios仅验证编译，暂未处理部署
+
+Qt6.2.2 工具包存在映射问题，暂不能用。
 
 ### 打包脚本
 
@@ -109,8 +159,9 @@ ubuntu-20.04
 
 MacOS平台是简单的 macdeployqt命令调用，生成的dmg上传。
 
-Windows平台做的比较到位，实现了自动化发布脚本，可以参考scripts/windows-publish.ps1
+Windows平台做了'私有部署'，也就是带上全套dll(c# 及msdn中这么叫的)，
 
+可以参考scripts/windows-publish.ps1 脚本。
 
 调用windeployqt命令后，还会拷贝编译器的vcredist相关dll和windows kit运行时
 
