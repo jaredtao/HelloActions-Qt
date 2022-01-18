@@ -53,6 +53,11 @@ jobs:
             qt_arch: win64_msvc2019_64
             msvc_arch: x64
             qt_arch_install: msvc2019_64
+          # 6.2.2
+          - qt_ver: 6.2.2
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
     env:
       targetName: HelloActions-Qt.exe
     # 步骤
@@ -60,7 +65,7 @@ jobs:
       # 安装Qt
       - name: Install Qt
         # 使用外部action。这个action专门用来安装Qt
-        uses: jurplel/install-qt-action@v2.13.0
+        uses: jurplel/install-qt-action@v2
         with:
           # Version of Qt to install
           version: ${{ matrix.qt_ver }}
@@ -101,7 +106,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ${{ steps.package.outputs.packageName }}.zip
+          path: ${{ steps.package.outputs.packageName }}
       # tag 上传Release
       - name: uploadRelease
         if: startsWith(github.event.ref, 'refs/tags/')
