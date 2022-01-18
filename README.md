@@ -65,6 +65,7 @@
 
 Windows 宿主平台是Server 2019,支持的目标环境包括:
 
+msvc 版本：
 * Qt5.9.9-msvc2015-x86
 * Qt5.9.9-msvc2017-x64
 * Qt5.12.10-msvc2017-x86
@@ -74,7 +75,7 @@ Windows 宿主平台是Server 2019,支持的目标环境包括:
 * Qt6.0.0-msvc2019-x64
 * Qt6.2.2-msvc2019-x64
 
-另外，感谢热心网友[Mozi](https://github.com/pzhlkj6612)补充mingw版本
+mingw版本：
 
 * Qt5.9.9 mingw53_32
 * Qt5.10.1 mingw53_32
@@ -88,10 +89,10 @@ Windows 宿主平台是Server 2019,支持的目标环境包括:
 * Qt5.15.2 mingw81_32
 * Qt5.15.2 mingw81_64
 * Qt6.0.0 mingw81_64
-  
-
 * Qt6.2.2 mingw90_64
-  
+
+(mingw版本由热心网友[Mozi](https://github.com/pzhlkj6612)提供初版，在此表示感谢!)
+
 ### MacOS
 
 MacOS平台以MacOS 10.15 为主, 11.0存在一些问题,尚未解决,暂不公开。
