@@ -1,6 +1,7 @@
 name: Ubuntu
 # Qt官方没有linux平台的x86包
 on: 
+  workflow_dispatch:
   push:
     paths:
       - '*.pro'
@@ -47,7 +48,6 @@ jobs:
         run: |
           # 拷贝依赖
           linuxdeploy-x86_64.AppImage --plugin=qt --output=appimage --create-desktop-file --icon-file=${targetName}.svg --executable=bin/release/${targetName} --appdir bin/release/
-          ls -a
           mv ${{ env.targetName }}-*.AppImage ${{ env.targetName }}.AppImage
       # 上传artifacts          
       - uses: actions/upload-artifact@v2
