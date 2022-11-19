@@ -43,6 +43,10 @@ jobs:
         run: |
           qmake
           make
+      - name: install QT linux deploy
+        uses: miurahr/install-linuxdeploy-action@v1
+        with:
+          plugins: qt appimage
       # 打包
       - name: package
         run: |
