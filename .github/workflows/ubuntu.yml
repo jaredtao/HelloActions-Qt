@@ -25,6 +25,8 @@ jobs:
           - os: ubuntu-18.04
             qt_ver: 6.2.2
             qt_arch: gcc_64
+    env:
+      targetName: HelloActions-Qt
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -40,3 +42,25 @@ jobs:
         run: |
           qmake
           make
+      # 打包
+      - name: package
+        run: |
+          # 拷贝依赖
+          linuxdeploy-x86_64.AppImage --plugin=qt --output=appimage --create-desktop-file --icon-file=${targetName}.svg --executable=bin/release/${targetName} --appdir bin/release/
+          ls -a
+          mv ${{ env.targetName }}-*.AppImage ${{ env.targetName }}.AppImage
+      # 上传artifacts          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          path: ${{ env.targetName }}.AppImage
+      # tag 上传Release
+      - name: uploadRelease
+        if: startsWith(github.event.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.targetName }}.AppImage
+          asset_name: ${{ env.targetName }}_${{ matrix.os }}_${{ matrix.qt_ver }}.AppImage
+          tag: ${{ github.ref }}
+          overwrite: true
